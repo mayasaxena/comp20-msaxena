@@ -4,7 +4,48 @@
 <html>
 
 <head>
-<title>Fecesbook</title>
+<title>Fecesbook
+</title>
+
+<script type="text/javascript">
+function updateStatus() {
+
+        var msg = document.getElementById("msg").value;
+        var parent = document.getElementById("status");
+
+        var date = new Date();
+
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear().toString();
+
+        var hour = date.getHours();
+        var min = date.getMinutes();
+
+
+        if(msg != "ANNIHILATE!!!") {
+
+                var status = document.createElement("p");
+
+                status.textContent = month + "/" + day + "/" + year + " " 
+                        + hour + ":" + ('0' + min).slice(-2) + " - " + msg;
+
+                parent.insertBefore(status, parent.firstChild);
+
+        }
+        else {
+                while(parent.firstChild) {
+                        parent.removeChild(parent.firstChild);
+                }
+
+        }
+
+        /* clear out text box after input */
+        document.getElementById("msg").value = null;
+       
+}
+
+</script>
 </head>
 
 <body>
@@ -20,7 +61,7 @@
                 </ul>
         </div>
         <h2 id="fullname">Barney Gumble</h2>
-        <h3>What are you thinking about? <input type="text" id="msg" name="msg" size="30" /></h3>
+        <h3>What are you thinking about? <input type="text" id="msg" name="msg" size="30" onchange="updateStatus()"/></h3>
         <h3>Updates</h3>
         <div id="status">
         </div>
