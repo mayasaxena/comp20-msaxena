@@ -8,8 +8,6 @@ function draw() {
                 alert("Canvas not supported on browser.");
         }
 
-        
-
         var img = new Image();
 
         img.src = "assets/duckhunt.png";
