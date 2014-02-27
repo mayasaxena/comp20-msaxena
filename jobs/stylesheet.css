@@ -4,14 +4,12 @@ html, body {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-h1 {
+h1, h3 {
         font-family: 'Flamenco', cursive;
         text-align: center;
 }
 
 h3 {
-        font-family: 'Flamenco', cursive;
-        text-align: center;
         font-size: 10pt;
 }
 
@@ -22,7 +20,6 @@ p {
         margin:20px;
         background-color: #A3EDF4;
         border-radius: 10px;
-
         margin-left: 20%;
 }
 
@@ -45,12 +42,10 @@ p:hover div.extra {
 }
 
 p:hover .main {
-      display: none;  
+        display: none;  
 }
 
 p:hover .comp {
-        margin: 0;
         font-size: 20pt;
         padding: 2px;
-        text-align: center;
 }
