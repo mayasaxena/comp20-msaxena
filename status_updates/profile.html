@@ -8,10 +8,20 @@
 </title>
 
 <script type="text/javascript">
+
+function restoreStatuses() {
+        var parent = document.getElementById("status");
+
+        if(localStorage.getItem("statuses")) {
+                parent.innerHTML = localStorage.getItem("statuses");
+        }
+}
+
 function updateStatus() {
 
         var msg = document.getElementById("msg").value;
         var parent = document.getElementById("status");
+
 
         var date = new Date();
 
@@ -31,7 +41,7 @@ function updateStatus() {
                         + hour + ":" + ('0' + min).slice(-2) + " - " + msg;
 
                 parent.insertBefore(status, parent.firstChild);
-
+                
         }
         else {
                 while(parent.firstChild) {
@@ -40,15 +50,19 @@ function updateStatus() {
 
         }
 
+        localStorage.setItem("statuses", parent.innerHTML);
+
         /* clear out text box after input */
         document.getElementById("msg").value = null;
+
+
        
 }
 
 </script>
 </head>
 
-<body>
+<body onload="restoreStatuses()">
         <h1>Fecebook</h1>
         <div id="nav">
                 <ul>
