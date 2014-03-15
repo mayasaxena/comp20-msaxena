@@ -2,6 +2,11 @@ README.txt
 Assignment 3 MBTA Map and Schedule Rodeo
 
 
+Everything has been implemented correctly.
+
+Hours spent: 10
+
+
 Acknowledgements:
 
 geolocation_map_style.css taken from Ming's geolocation example.
