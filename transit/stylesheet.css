@@ -1,2 +1,12 @@
 /* CSS for A3 MBTA Map and Schedule Rodeo */
 
+
+span.b {
+        font-weight: bold;
+}
+
+table, th, td{
+        border-style:solid;
+        border-width:1px;
+        border-spacing: 0px;
+}
