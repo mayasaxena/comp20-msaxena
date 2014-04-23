@@ -3,6 +3,9 @@ Contents of Maya Saxena's private repository for Comp 20:
 - status_updates folder for Lab 5
 - duckhunt folder for Assignment 2
 - jobs folder for Lab 6
+- transit folder for Assignment 3
+- 2048-gamecenter folder for Assignment 4
+- security folder for Assignment 5
 
 1. This repository is to hold the assignments and labs I worked on in Comp 20
 
