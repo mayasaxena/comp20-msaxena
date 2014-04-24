@@ -2,6 +2,6 @@ README
 Comp 20 Assignment 5
 Maya Saxena
 
-Identify what aspects of the work have been correctly implemented and what have not.
-Identify anyone with whom you have collaborated or discussed the assignment.
-Say approximately how many hours you have spent completing the assignment.
+All aspects of the assignment have been correctly implemented
+I discussed the assignment with Win Halelamien, my partner for the assignment
+Approximately 8 hours were spent working on the assignment
