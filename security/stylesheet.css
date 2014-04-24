@@ -22,3 +22,12 @@ h4, h5, p
 {
         margin-left: 5%;
 }
+
+img
+{
+        display: block;
+        margin:auto;
+        height: 300px;
+        width: auto;
+        padding:50px;
+}

@@ -39,7 +39,13 @@
                 code for the project was examined to locate any other vulnerabilities.</p>
 
         <h2>Abstract of Findings</h2>
-        <p></p>
+        <p>The main security issues with this application arise from the fact
+                that the data it stores and displays is not restricted or vetted
+                in any way. Anyone with minimum knowledge of the application could
+                store data in the application's database. That data could contain
+                code runs whenever the data is loaded on a web page,
+                affecting the performance of the application, and depending on
+                the code that executes, damaging the user's computer.</p>
 
         <h2>Issues Found</h2>
         <h3>1. Cross-Site Scripting</h3>
@@ -48,13 +54,20 @@
         <h4>Description of Issue:</h4>
         <p>One of the major security issues with the site is the ability for an 
                 attacker to inject script into the fields stored in the database.
-                The data stored in the database is not sanitized in any manner,
-                making it easy for a script tag or other HTML to be inserted.
-                When the application's scoreboard is loaded, the saved information
-                from the database is directly inserted into the HTML of the page</p>
+                The data stored in the database is not sanitized in any manner before entry, it is just saved as is.
+                When the application's scoreboard page loads, the saved information
+                from the database is directly inserted into the HTML of the page.
+                If what is stored in the database is appropriate data, there are no problems.
+                However, if it is code, then the code will execute and alter the page.
+                The database itself cannot be accessed in this manner, so the 
+                data cannot be changed, but the site itself can be made inoperable.</p>
         <p>One effect of this vulnerability can be seen by running 
          <code>curl --data 'username=&ltiframe src="http://www.nyan.cat"&gt&lt/iframe&gt&score=0&grid={}' http://limitless-harbor-3229.herokuapp.com/submit.json</code>. This code inserts an iframe into the scoreboard. Although this does not outright prevent the application from
          functioning, it makes the insecurity of the application obvious by displaying incorrect data to all clients.</p>
+
+                <p><img src="beforenyan.png"></p>
+                <p><img src="nyancathack.png"></p>
+
 
         <p>An attacker could render the website entirely unusable by inserting 
                 <code>&ltscript type="text/javascript"&gt window.location = "http://www.google.com/"; &lt/script&gt</code>
@@ -69,19 +82,33 @@
                 any potential malicious code will not execute, maintaining the 
                 integrity of the application.</p>
 
+
         <h3>2. No Discrimination in Cross Origin Resource Sharing (CORS)</h3>
-        <h4>Location of Issue:</h4><p>2048 Game Center main page/GET API</p>
+        <h4>Location of Issue:</h4><p>POST API</p>
         <h4>Severity of Issue: Moderate</h4>
+        <p>Although in combination with the above mentioned
+                issue of non-sanitized inputs the severity could be high,
+                alone, the issue is only moderate in severity as it could not
+                lead to a user actively being harmed. </p>
+        <h4>Description of Issue:</h4>
         <p>This application has Cross-Origin Resource Sharing enabled for any
                 origin due to the design specification. However, this presents
-                a problem as any attacker could post data to the application that will then be
-                stored in the database. This issue's severity is moderate because </p>
+                a problem as anyone could post data to the application that will then be
+                stored in the database. Similarly, the data stored in the database
+                can be accessed by anyone. This vulnerability makes it possible for an attacker
+                to entirely circumvent the purpose of the application -
+                to store player's high scores from 2048. And attacker could post
+                any score they wanted from anywhere because there are no restrictions on the POST request.</p>
+        <h4>Resolution</h4>
+                <p>Instead of allowing all origins to access the application as it is currently:
+                <code>res.header('Access-Control-Allow-Origin', '*');</code>,
+                whitelist certain origins explicitly to control the source of data.</p>
+
+        <h3>3. Database Capacity</h3>
+        <h4>Location of Issue:</h4><p>MongoDB/POST API</p>
+        <h4>Severity of Issue: Moderate</h4>
         <h4>Description of Issue:</h4>
         <h4>Resolution</h4>
-
-        <p>3. </p>
-
-
 </body>
 
 </html>
