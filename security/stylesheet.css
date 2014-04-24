@@ -1,2 +1,24 @@
 /* CSS for 2048 Game Center Security Assessment */
 
+body
+{
+        font-family: "HelveticaNeue-Light", Helvetica, sans serif;
+        width: 90%;
+        margin: auto;
+}
+
+p 
+{
+        line-height: 1.5em;
+}
+
+code
+{
+        padding: .5em;
+        margin: auto;
+}
+
+h4, h5, p
+{
+        margin-left: 5%;
+}

@@ -3,19 +3,84 @@
 
 <head>
         <title>2048 Game Center Security Assessment</title>
+        <link rel="stylesheet" href="stylesheet.css" />
         <meta charset="UTF-8">
 </head>
 
 <body>
         <h1>Security Assessment of 2048 Game Center</h1>
-        <h4>Maya Saxena<h3>
+        <p>Maya Saxena</p>
+        <p>Comp 20 Assignment 5</p>
 
 
-        <h3>Introduction</h3>
+        <h2>Introduction</h2>
+        <p>The <a href="http://limitless-harbor-3229.herokuapp.com/">2048 Game Center</a>
+                is a web application developed by
+                <a href="http://lokoyo.github.io/">Win Halelamien</a> for
+                Comp 20 Assignment 4 that maintains data from the
+                game <a href="http://gabrielecirulli.github.io/2048/">2048</a>.
+                The application offers an API for submitting a player's final
+                score and grid along with a username and the time the game was finished.
+                The 2048 Game Center's web interface features a scoreboard that 
+                displays scores for all players sorted in descending order along
+                with usernames and timestamps for each score. The web interface
+                also allows users to find a player's scores and final grids by username.
+        </p>
+
+        <p>The purpose of this assessment is to identify the security vulnerabilities
+                potentially present in this application, and suggest solutions to those
+                problems. 
+        </p>
+
+        <h2>Methodology</h2>
+        <p>The application was first tested without any knowledge of the source
+                code to determine obvious vulnerabilities that could be exploited
+                by any attacker. Once those problems were identified, the source
+                code for the project was examined to locate any other vulnerabilities.</p>
+
+        <h2>Abstract of Findings</h2>
         <p></p>
 
-        <h3>Methodology</h3>
-        <p></p>
+        <h2>Issues Found</h2>
+        <h3>1. Cross-Site Scripting</h3>
+        <h4>Location of Issue:</h4><p>2048 Game Center main page/GET API</p>
+        <h4>Severity of Issue: High</h4>
+        <h4>Description of Issue:</h4>
+        <p>One of the major security issues with the site is the ability for an 
+                attacker to inject script into the fields stored in the database.
+                The data stored in the database is not sanitized in any manner,
+                making it easy for a script tag or other HTML to be inserted.
+                When the application's scoreboard is loaded, the saved information
+                from the database is directly inserted into the HTML of the page</p>
+        <p>One effect of this vulnerability can be seen by running 
+         <code>curl --data 'username=&ltiframe src="http://www.nyan.cat"&gt&lt/iframe&gt&score=0&grid={}' http://limitless-harbor-3229.herokuapp.com/submit.json</code>. This code inserts an iframe into the scoreboard. Although this does not outright prevent the application from
+         functioning, it makes the insecurity of the application obvious by displaying incorrect data to all clients.</p>
+
+        <p>An attacker could render the website entirely unusable by inserting 
+                <code>&ltscript type="text/javascript"&gt window.location = "http://www.google.com/"; &lt/script&gt</code>
+                into the username field. The script is inserted into the scoreboard page HTML by the application, and it redirects the page to Google as soon as the page loads. This obviously could be used
+                in a variety of malicious manners at worst, as the page could be
+                redirected anywhere, but at best it makes it impossible for a user
+                to use the application for its intended purpose.
+        <h4>Resolution</h4>
+        <p>This issue can be resolved by sanitizing the input before it is
+                inserted into the database. Characters commonly present in HTML
+                can be escaped so that when the the HTML for the scoreboard loads,
+                any potential malicious code will not execute, maintaining the 
+                integrity of the application.</p>
+
+        <h3>2. No Discrimination in Cross Origin Resource Sharing (CORS)</h3>
+        <h4>Location of Issue:</h4><p>2048 Game Center main page/GET API</p>
+        <h4>Severity of Issue: Moderate</h4>
+        <p>This application has Cross-Origin Resource Sharing enabled for any
+                origin due to the design specification. However, this presents
+                a problem as any attacker could post data to the application that will then be
+                stored in the database. This issue's severity is moderate because </p>
+        <h4>Description of Issue:</h4>
+        <h4>Resolution</h4>
+
+        <p>3. </p>
+
 
 </body>
 
