@@ -2,57 +2,58 @@
 <html>
 
 <head>
-        <title>2048 Game Center Security Assessment</title>
-        <link rel="stylesheet" href="stylesheet.css" />
-        <meta charset="UTF-8">
+    <title>2048 Game Center Security Assessment</title>
+    <link rel="stylesheet" href="stylesheet.css" />
+    <meta charset="UTF-8">
 </head>
 
 <body>
-        <h1>Security Assessment of 2048 Game Center</h1>
-        <p>Maya Saxena</p>
-        <p>Comp 20 Assignment 5</p>
+    <h1>Security Assessment of 2048 Game Center</h1>
+    <p>Maya Saxena</p>
+    <p>Comp 20 Assignment 5</p>
 
 
-        <h2>Introduction</h2>
-        <p>The <a href="http://limitless-harbor-3229.herokuapp.com/">2048 Game Center</a>
-                is a web application developed by
-                <a href="http://lokoyo.github.io/">Win Halelamien</a> for
-                Comp 20 Assignment 4 that maintains data from the
-                game <a href="http://gabrielecirulli.github.io/2048/">2048</a>.
-                The application offers an API for submitting a player's final
-                score and grid along with a username and the time the game was finished.
-                The 2048 Game Center's web interface features a scoreboard that 
-                displays scores for all players sorted in descending order along
-                with usernames and timestamps for each score. The web interface
-                also allows users to find a player's scores and final grids by username.
-        </p>
+    <h2>Introduction</h2>
+    <p>The <a href="http://limitless-harbor-3229.herokuapp.com/">2048 Game Center</a>
+        is a web application developed by
+        <a href="http://lokoyo.github.io/">Win Halelamien</a> for
+        Comp 20 Assignment 4 that maintains data from the
+        game <a href="http://gabrielecirulli.github.io/2048/">2048</a>.
+        The application offers an API for submitting a player's final
+        score and grid along with a username and the time the game was finished.
+        The 2048 Game Center's web interface features a scoreboard that 
+        displays scores for all players sorted in descending order along
+        with usernames and timestamps for each score. The web interface
+        also allows users to find a player's scores and final grids by username.
+    </p>
 
-        <p>The purpose of this assessment is to identify the security vulnerabilities
-                potentially present in this application, and suggest solutions to those
-                problems. 
-        </p>
+    <p>The purpose of this assessment is to identify the security vulnerabilities
+        potentially present in this application, and suggest solutions to those
+        problems. 
+    </p>
 
-        <h2>Methodology</h2>
-        <p>The application was first tested without any knowledge of the source
-                code to determine obvious vulnerabilities that could be exploited
-                by any attacker. Once those problems were identified, the source
-                code for the project was examined to locate any other vulnerabilities.</p>
+    <h2>Methodology</h2>
+    <p>The application was first tested without any knowledge of the source
+        code to determine obvious vulnerabilities that could be exploited
+        by any attacker. Once those problems were identified, the source
+        code for the project was examined to locate any other vulnerabilities.</p>
 
-        <h2>Abstract of Findings</h2>
-        <p>The main security issues with this application arise from the fact
-                that the data it stores and displays is not restricted or vetted
-                in any way. Anyone with minimum knowledge of the application could
-                store data in the application's database. That data could contain
-                code runs whenever the data is loaded on a web page,
-                affecting the performance of the application, and depending on
-                the code that executes, damaging the user's computer.</p>
+    <h2>Abstract of Findings</h2>
+    <p>The main security issues with this application arise from the fact
+        that the data it stores and displays is not restricted or vetted
+        in any way. Anyone with minimum knowledge of the application could
+        store data in the application's database. That data could contain
+        code runs whenever the data is loaded on a web page,
+        affecting the performance of the application, and depending on
+        the code that executes, damaging the user's computer.</p>
 
-        <h2>Issues Found</h2>
+    <h2>Issues Found</h2>
+    
         <h3>1. Cross-Site Scripting</h3>
-        <h4>Location of Issue:</h4><p>2048 Game Center main page/GET API</p>
-        <h4>Severity of Issue: High</h4>
-        <h4>Description of Issue:</h4>
-        <p>One of the major security issues with the site is the ability for an 
+            <h4>Location of Issue:</h4><p>2048 Game Center main page/GET API</p>
+            <h4>Severity of Issue: <span class="high">High</span></h4>
+            <h4>Description of Issue:</h4>
+            <p>One of the major security issues with the site is the ability for an 
                 attacker to inject script into the fields stored in the database.
                 The data stored in the database is not sanitized in any manner before entry, it is just saved as is.
                 When the application's scoreboard page loads, the saved information
@@ -61,22 +62,22 @@
                 However, if it is code, then the code will execute and alter the page.
                 The database itself cannot be accessed in this manner, so the 
                 data cannot be changed, but the site itself can be made inoperable.</p>
-        <p>One effect of this vulnerability can be seen by running 
-         <code>curl --data 'username=&ltiframe src="http://www.nyan.cat"&gt&lt/iframe&gt&score=0&grid={}' http://limitless-harbor-3229.herokuapp.com/submit.json</code>. This code inserts an iframe into the scoreboard. Although this does not outright prevent the application from
-         functioning, it makes the insecurity of the application obvious by displaying incorrect data to all clients.</p>
+            <p>One effect of this vulnerability can be seen by running 
+             <code>curl --data 'username=&ltiframe src="http://www.nyan.cat"&gt&lt/iframe&gt&score=0&grid={}' http://limitless-harbor-3229.herokuapp.com/submit.json</code>. This code inserts an iframe into the scoreboard. Although this does not outright prevent the application from
+             functioning, it makes the insecurity of the application obvious by displaying incorrect data to all clients.</p>
 
-                <p><img src="beforenyan.png"></p>
-                <p><img src="nyancathack.png"></p>
+                <p><img src="beforenyan.png" alt="2048 Game Center Pre-iframe insertion"></p>
+                <p><img src="nyancathack.png" alt= "2048 Game Center Post-iframe insertion"></p>
 
 
-        <p>An attacker could render the website entirely unusable by inserting 
+            <p>An attacker could render the website entirely unusable by inserting 
                 <code>&ltscript type="text/javascript"&gt window.location = "http://www.google.com/"; &lt/script&gt</code>
                 into the username field. The script is inserted into the scoreboard page HTML by the application, and it redirects the page to Google as soon as the page loads. This obviously could be used
                 in a variety of malicious manners at worst, as the page could be
                 redirected anywhere, but at best it makes it impossible for a user
                 to use the application for its intended purpose.
-        <h4>Resolution</h4>
-        <p>This issue can be resolved by sanitizing the input before it is
+            <h4>Resolution</h4>
+            <p>This issue can be resolved by sanitizing the input before it is
                 inserted into the database. Characters commonly present in HTML
                 can be escaped so that when the the HTML for the scoreboard loads,
                 any potential malicious code will not execute, maintaining the 
@@ -84,31 +85,90 @@
 
 
         <h3>2. No Discrimination in Cross Origin Resource Sharing (CORS)</h3>
-        <h4>Location of Issue:</h4><p>POST API</p>
-        <h4>Severity of Issue: Moderate</h4>
-        <p>Although in combination with the above mentioned
+            <h4>Location of Issue:</h4><p>POST API</p>
+            <h4>Severity of Issue: <span class="moderate">Moderate</span></h4>
+            <p>Although in combination with the above mentioned
                 issue of non-sanitized inputs the severity could be high,
                 alone, the issue is only moderate in severity as it could not
                 lead to a user actively being harmed. </p>
-        <h4>Description of Issue:</h4>
-        <p>This application has Cross-Origin Resource Sharing enabled for any
+            <h4>Description of Issue:</h4>
+            <p>This application has Cross-Origin Resource Sharing enabled for any
                 origin due to the design specification. However, this presents
                 a problem as anyone could post data to the application that will then be
                 stored in the database. Similarly, the data stored in the database
                 can be accessed by anyone. This vulnerability makes it possible for an attacker
                 to entirely circumvent the purpose of the application -
-                to store player's high scores from 2048. And attacker could post
-                any score they wanted from anywhere because there are no restrictions on the POST request.</p>
-        <h4>Resolution</h4>
+                to store player's high scores from 2048 by posting
+                any score they wanted. This compromises the integrity of the application
+                and would more than likely turn away users.</p>
+            <h4>Resolution</h4>
                 <p>Instead of allowing all origins to access the application as it is currently:
                 <code>res.header('Access-Control-Allow-Origin', '*');</code>,
                 whitelist certain origins explicitly to control the source of data.</p>
 
         <h3>3. Database Capacity</h3>
-        <h4>Location of Issue:</h4><p>MongoDB/POST API</p>
-        <h4>Severity of Issue: Moderate</h4>
-        <h4>Description of Issue:</h4>
-        <h4>Resolution</h4>
+
+            <h4>Location of Issue:</h4><p>MongoDB/POST API</p>
+
+            <h4>Severity of Issue: <span class="high">High</span></h4>
+
+            <h4>Description of Issue:</h4>
+            <p>This application uses the MongoDB servers to store data, and the server
+            capacity for the application is 0.5 GB. This means the database can store
+            a significant number of player scores. However, it is quite simple to
+            carry out a denial-of-service (DoS) attack on the application and flood
+            the server, thus rendering the application inoperable.</p>
+            <p>For the purposes of testing the actual database capacity, I wrote a 
+                bash script to fill the database and determine what happens
+                when the database is filled.</p>
+                <pre>
+                <code>     
+                #!/bin/bash
+                count=1
+                while [ $count -le 100000 ]
+                do
+                    echo "$count"
+                    curl --data 'username=eviloverlord&score=42&grid={}' http://limitless-harbor-3229.herokuapp.com/submit.json
+                    (( count++ ))
+                done
+                </code>
+                </pre>
+            <p>I modified the script slightly while testing to increase the username,
+            score and grid size in an attempt to fill the database faster, but the 
+            gist of the script, running <code>curl</code> many times, is the same.
+            After the database was filled, the application web interface appeared
+            like the below image.</p>
+            <p><img src="overfill.png" alt="Application Error due to full database"></p>
+
+            <p>As is evident, the application is entirely unusable, and
+                due to the number of entries, the entire collection would need
+                to be deleted to restore it, thus losing many user scores. The
+                bad entries themselves could be removed, but that would cost the
+                developer quite a lot of time.</p>
+            <p>Note: It is also possible that the error is caused not by the database
+                being filled but by the web interface being unable to display the
+                number of entries. In either case, the problem still exists as the
+                application cannot be accessed.</p>
+
+            <p>The severity of this issue is high because it is very easy someone
+                to flood the server and make the application unusable. Additionally, in this
+                case, the database used for the application was free, but in another
+                scenario, the storage space might be paid, and going over the limit
+                would cost the developer money.</p>
+            <h4>Resolution</h4>
+            <p>A way to resolve this would be to put a reasonable limit on the number of
+                entries a player could have on the scoreboard. Since it would still be possible
+                for an attacker to simply change a username, a cap on the entire database size below its capacity
+                would stop the database from overflowing and keep the application running.</p>
+
+        <h2>Conclusion</h2>
+        <p>The 2048 Game Center as it is can be easily attacked to cause it to malfunction.
+            Bad data can be submitted to the database without any sanitization, which can
+            potentially lead to malicious code executing on user's computers. CORS is enabled
+            for all domains, so anyone can post data to the application, and the server in which
+            the data is stored can be flooded, causing the application to become unusable. However,
+            all of these vulnerabilities are easily remedied by the solutions listed above, and
+            fixing them would result in a functional application.</p>
 </body>
 
 </html>

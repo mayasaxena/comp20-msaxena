@@ -27,7 +27,17 @@ img
 {
         display: block;
         margin:auto;
-        height: 300px;
-        width: auto;
-        padding:50px;
+        width: 90%;
+        height: auto;
+        padding:30px;
+}
+
+.high
+{
+        color:red;
+}
+
+.moderate
+{
+        color:orange;
 }
